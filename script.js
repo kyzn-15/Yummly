@@ -71,15 +71,21 @@ function getMealList(){
     });
 }
 
-function getMealRecipe(e){
+async function getMealRecipe(e) {
     e.preventDefault();
-    if(e.target.classList.contains('recipe-btn')){
+    
+    if (e.target.classList.contains('recipe-btn')) {
         let mealItem = e.target.parentElement.parentElement;
-        fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealItem.dataset.id}`)
-        .then(response => response.json())
-        .then(data => mealRecipeModal(data.meals));
+        try {
+            const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealItem.dataset.id}`);
+            const data = await response.json();
+            mealRecipeModal(data.meals);
+        } catch (error) {
+            console.error("Error fetching meal data:", error);
+        }
     }
 }
+
 
 function mealRecipeModal(meal){
     console.log(meal);
